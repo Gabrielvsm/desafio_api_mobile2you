@@ -1,9 +1,7 @@
-require 'csv'
-
 class TitlesController < ApplicationController
   def index
-    @titles = Title.all
-    render json: @titles
+    filters = params.permit(:release_year, :type, :country).to_h
+    render json: Serializer.json_response(filters)
   end
 
   def create

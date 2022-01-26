@@ -1,3 +1,5 @@
+require 'csv'
+
 module Handlers
   module CsvHandler
     class << self
@@ -7,8 +9,8 @@ module Handlers
         csv_data = CSV.parse(File.read(csv_file), headers: true)
         csv_data.each do |item|
           type = get_instance(Type, item['type'], :type_name)
-          country = get_instance(Country, item['country'], :name)
-          release = get_instance(ReleaseYear, item['release_year'], :year)
+          country = get_instance(Country, item['country'], :country)
+          release = get_instance(ReleaseYear, item['release_year'], :release_year)
           rating = get_instance(Rating, item['rating'], :rating_type)
           title = Title.create!(
             show_id: item['show_id'],
@@ -25,7 +27,7 @@ module Handlers
 
           actors = handle_arrays(item['cast'], Actor, :name)
           check_empty(actors, TitleActor, :actor, title)
-          categories = handle_arrays(item['listed_in'], Category, :category_name)
+          categories = handle_arrays(item['listed_in'], Category, :category)
           check_empty(categories, TitleCategory, :category, title)
           directors = handle_arrays(item['director'], Director, :name)
           check_empty(directors, TitleDirector, :director, title)
