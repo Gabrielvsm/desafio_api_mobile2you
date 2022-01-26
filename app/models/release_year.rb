@@ -1,0 +1,2 @@
+class ReleaseYear < ApplicationRecord
+end
